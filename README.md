@@ -1,91 +1,84 @@
 # Security Journey 🔐
 My path from zero to Cloud Security Engineer
 
+Started from absolute zero — no IT background.
+Currently working in economics and risk analytics,
+making a career transition into cloud security.
+
 ---
 
-## Day 1 — Networking Fundamentals & Linux Basics
-**Date:** May 23, 2026
+## Day 1 — Networking & Linux Basics
+**Date:** May 23, 2026 | **Time:** ~3 hours
 
-### What I learned:
-- How DNS, IP, ports, TCP, and HTTPS work
-- CDN and reverse proxy — discovered TikTok runs through Akamai
-- Linux file system structure
-- File permissions: chmod, chown, ls -la
-- Users and groups: /etc/passwd, /etc/shadow
-- Log analysis: auth.log — reconstructed a full timeline of events
-- Cron jobs: task scheduling and how hackers use it for persistence
+First time touching Linux seriously. More hands-on than I expected.
 
-### Commands practiced:
-```bash
-nslookup    # DNS lookup
-tracert     # trace network route
-ping        # test connectivity
-pwd         # print working directory
-ls -la      # list files with permissions
-cat         # read file contents
-chmod       # change file permissions
-chown       # change file owner
-grep        # search text in files
-tail        # read end of file
-find        # search files by criteria
-sudo        # execute as root
-whoami      # current user
-groups      # user group membership
-passwd      # change password
-crontab     # manage scheduled tasks
-```
+### What clicked today:
+- DNS is basically a phone book — without it you can't reach anything
+- Found out TikTok runs through Akamai CDN, not their own servers
+- Linux file permissions finally make sense — rwxrwxrwx = 777 = dangerous
+- /etc/shadow stores password hashes, not actual passwords
+- John the Ripper cracked "password123" in under a second using rockyou.txt
 
-### Hands-on practice:
-- Found real IPs of Google and YouTube via nslookup
-- Identified TikTok uses Akamai CDN through reverse lookup
-- Built security_lab directory and configured file permissions
-- Read /etc/shadow and /etc/passwd, understood every field
+### What confused me at first:
+- Difference between cat and ls — one reads files, other lists directories
+- Why sudo is needed for some commands but not others
+- The difference between 400 and 600 file permissions
+
+### Hands-on:
+- Ran nslookup on Google, YouTube, TikTok — compared IPs
+- Traced route to Google — 7 hops from my machine
+- Built security_lab directory, set proper file permissions
+- Read /etc/passwd and /etc/shadow — understood every field
 - Analyzed auth.log and found my own failed sudo attempts
-- Read my first bash script — logrotate
+- Cracked a password hash using John the Ripper + rockyou.txt wordlist
 
-### Key concepts:
-- **Least Privilege** — every user/process gets minimum required access
-- **Credential exposure** — secrets must never sit in files with 644 permissions
-- **Persistence** — how attackers survive reboots using cron jobs
-- **Log analysis** — reconstructing events from system logs
+### Key insight:
+Hashing is NOT encryption. You can't reverse a hash —
+you can only guess and compare. That's why weak passwords
+are dangerous even when "hashed".
 
-## Day 2 — SSH, AWS EC2 & Cloud Security
-**Date:** May 25, 2026
+---
 
-### What I did:
-- Generated SSH keys (ed25519) and understood public/private key pairs
-- Launched first EC2 instance on AWS in Ohio data center
-- Connected via SSH to a real cloud server
-- Found real attacks in auth.log within hours of server launch
-- Analyzed attacker from Rostelecom (Russia) — 26 attempts
-- Decoded attacker wordlist: admin, pi, oracle, ftpuser, test1, test2, usuario
-- Configured server hardening: ufw, fail2ban, auto-updates
-- Set up CloudWatch Agent — centralized log monitoring
-- Created metric filter and alarm — email alert on SSH attacks
-- Confirmed SNS subscription for security notifications
+## Day 2 — SSH, AWS EC2 & Real Attacks
+**Date:** May 25, 2026 | **Time:** ~4 hours
 
-### Mistakes & lessons:
-- Enabled ufw WITHOUT allowing port 22 first → locked out of server
-- Correct order: sudo ufw allow 22 → sudo ufw enable
-- Recovery: created IAM role + used SSM Session Manager via browser
-- IAM AccessDenied on CloudWatch → added CloudWatchAgentServerPolicy to role
+First time in a real cloud environment. Things broke. Learned a lot.
 
-### Key concepts:
-- **Defense in depth** — Security Group + ufw + fail2ban (3 layers)
-- **IAM roles** — permissions for AWS services, not humans
-- **Centralized logging** — CloudWatch collects logs from all servers
-- **Locked out recovery** — SSM Session Manager bypasses SSH
-- **Real attacks happen fast** — server found by bots within hours
+### What happened:
+Launched my first EC2 instance on AWS.
+Within a few hours — found real attacks in the logs.
+A bot from Rostelecom (Russia) tried 26 different usernames:
+admin, pi, oracle, ftpuser, test1, test2, usuario...
+Just a script running 24/7 scanning the entire internet.
 
-### Commands practiced:
-```bash
-ssh-keygen -t ed25519    # generate SSH keys
-ssh -i key.pem user@ip   # connect to remote server
-sudo ufw allow 22        # allow SSH before enabling firewall
-sudo ufw enable          # enable firewall
-sudo ufw deny from IP    # block specific attacker
-sudo systemctl status X  # check service status
-sudo fail2ban-client status sshd  # check banned IPs
-wget URL                 # download file
-sudo dpkg -i file.deb    # install local package
-```
+### The mistake that locked me out:
+Enabled ufw firewall WITHOUT allowing SSH port 22 first.
+Lost access to the server completely.
+
+Spent time figuring out recovery:
+created IAM role → attached SSM policy → rebooted →
+connected via Session Manager through browser.
+
+The correct order I'll never forget:
+sudo ufw allow 22   ← ALWAYS first
+sudo ufw enable     ← only then
+
+### What I built:
+- EC2 server in AWS Ohio region
+- SSH key-based authentication (ed25519)
+- ufw firewall with attacker IP blocked
+- fail2ban — auto-blocks brute force attempts
+- Automatic security updates
+- CloudWatch Agent — logs shipped to AWS
+- Email alert when attack threshold exceeded
+
+### What clicked:
+IAM roles are not about humans — they're permissions
+for AWS services to talk to each other.
+My server needed a role to send logs to CloudWatch.
+Without it: AccessDenied.
+
+### Takeaway:
+Real attacks start within hours of launching a server.
+Defense in depth matters — Security Group + ufw + fail2ban
+are three separate layers, each catches what the other misses.
