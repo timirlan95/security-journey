@@ -96,3 +96,51 @@ you can see the server shutdown, restart, and my SSH connection:
 
 <img width="896" height="597" alt="2" src="https://github.com/user-attachments/assets/64f3602b-494d-47d1-beb8-d23f5a13ab91" />
 
+---
+
+## Day 3 — S3, IAM hardening, VPC
+**Date:** May 26, 2026
+
+Long session today. Covered a lot of ground.
+
+### Windows audit
+Started by auditing my own machine before touching anything else.
+Ran netstat, checked every process, looked at startup programs.
+Everything was clean. Found Yandex Browser in startup — going to remove it.
+
+### S3 security
+Created my first S3 bucket and immediately tried to break into it.
+Wrote a bucket policy that forces HTTPS — any unencrypted connection gets denied.
+Then opened the file URL in a browser as an anonymous user.
+
+Got AccessDenied. Exactly what should happen.
+<img width="1787" height="611" alt="2026-05-25_22-48-11" src="https://github.com/user-attachments/assets/ef17d08d-f457-447c-b2df-b738a2a30773" />
+That's how Capital One should have had it configured in 2019.
+
+### IAM hardening
+Found two problems with tim-admin:
+— No MFA (fixed)
+— AdministratorAccess attached directly instead of via group (fixed)
+
+Created Admins group, moved permissions there, added tim-admin to group.
+Now if I need to add another admin — just add them to the group.
+No need to touch individual policies.
+<img width="2462" height="1062" alt="2026-05-25_23-09-10" src="https://github.com/user-attachments/assets/48a31f6c-9d78-4977-b8d6-814d1cd8e900" />
+
+Also noticed tim-admin has access to 449 AWS services.
+Only using maybe 5 of them. Classic overprivileged account.
+Will fix this properly when I learn to write custom IAM policies.
+
+### VPC deep dive
+Finally understood how traffic actually gets from the internet to my server.
+
+The full chain:
+Internet → Internet Gateway → Route table → Subnet → Security Group → EC2 → ufw → fail2ban → SSH
+
+The route table is what makes a subnet public or private.
+One line: 0.0.0.0/0 → igw-xxx
+Remove that line and the subnet has no internet access at all.
+<img width="2377" height="1325" alt="2026-05-25_23-19-38" src="https://github.com/user-attachments/assets/8fdaef6f-a75c-447b-9b45-f34d98aea2c8" />
+
+Default VPC has all subnets public. Fine for learning, bad for production.
+Real architecture separates public and private subnets.
