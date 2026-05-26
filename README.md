@@ -47,8 +47,11 @@ First time in a real cloud environment. Things broke. Learned a lot.
 ### What happened:
 Launched my first EC2 instance on AWS.
 Within a few hours — found real attacks in the logs.
-A bot from Rostelecom (Russia) tried 26 different usernames:
+A bot from Rostelecom (Russia)  tried 26 different usernames:
+<img width="1725" height="921" alt="2026-05-25_22-13-50" src="https://github.com/user-attachments/assets/c6caa878-0a95-40ef-ae60-5585771ae1fc" />
 admin, pi, oracle, ftpuser, test1, test2, usuario...
+<img width="1721" height="924" alt="2026-05-25_22-15-07" src="https://github.com/user-attachments/assets/76b84a86-e09a-4969-94b4-c7717b5426fc" />
+
 Just a script running 24/7 scanning the entire internet.
 
 ### The mistake that locked me out:
@@ -82,3 +85,14 @@ Without it: AccessDenied.
 Real attacks start within hours of launching a server.
 Defense in depth matters — Security Group + ufw + fail2ban
 are three separate layers, each catches what the other misses.
+
+
+My EC2 instance running in AWS Ohio:
+
+<img width="1045" height="388" alt="1" src="https://github.com/user-attachments/assets/6ac447ff-a9a9-4b41-9adb-e0929e091c91" />
+
+CloudWatch showing real-time logs from the server —
+you can see the server shutdown, restart, and my SSH connection:
+
+<img width="896" height="597" alt="2" src="https://github.com/user-attachments/assets/64f3602b-494d-47d1-beb8-d23f5a13ab91" />
+
