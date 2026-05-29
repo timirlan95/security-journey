@@ -144,3 +144,37 @@ Remove that line and the subnet has no internet access at all.
 
 Default VPC has all subnets public. Fine for learning, bad for production.
 Real architecture separates public and private subnets.
+---
+## Day 4 — Python Automation & CloudTrail Analysis
+
+**Date:** May 28, 2026 | **Time:** ~2 hours
+
+### What I built today
+
+Three security audit scripts using Python and boto3.
+
+**iam_key_audit.py** — checks all IAM users for access keys older than 90 days.
+Old keys are a real risk — if a key leaked a year ago, you wouldn't know.
+Script flags anything over 90 days as critical.
+
+**cloudtrail_audit.py** — analyzes all AWS activity for the last 24 hours.
+Looks for dangerous events: deleting buckets, stopping logging, modifying IAM policies.
+Found 50 real events in my account. No suspicious activity detected.
+
+### What clicked today
+
+boto3 doesn't need a running EC2 server.
+Scripts run locally and talk directly to AWS API over the internet.
+EC2 is just a VM — IAM, S3, CloudTrail are separate services.
+
+### Key insight
+
+CloudTrail is the most important log in AWS.
+If an attacker deletes it first — you lose all visibility.
+That's why StopLogging and DeleteTrail are the first things to monitor.
+
+### Hands-on
+- Wrote iam_key_audit.py — key rotation check
+- Wrote cloudtrail_audit.py — suspicious event detection
+- Analyzed 50 real CloudTrail events from my account
+- Documented everything on GitHub
