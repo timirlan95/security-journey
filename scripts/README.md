@@ -44,4 +44,5 @@ Script checks all IAM users for access keys older than 90 days.
 
 **Usage:**
 python3 iam_key_audit.py
+
 <img width="719" height="413" alt="Screenshot 2026-05-28 230809" src="https://github.com/user-attachments/assets/952a081d-adf1-49f3-849c-a9a0e010f0ad" />
