@@ -31,3 +31,16 @@ This script does it in seconds and flags anything suspicious.
 
 Real use case: run this after any infrastructure change
 to make sure nothing was accidentally misconfigured.
+---
+## IAM Key Rotation Audit
+
+Script checks all IAM users for access keys older than 90 days.
+
+**What it does:**
+- Lists all IAM users
+- Checks each access key age
+- Skips inactive keys
+- Flags keys older than 90 days as critical
+
+**Usage:**
+python3 iam_key_audit.py
