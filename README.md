@@ -199,3 +199,21 @@ Three actions: LookupEvents, GetTrailStatus, DescribeTrails. That's it.
 
 Deny always beats Allow — that's the rule I'll remember from today.
 Doesn't matter how many policies say yes, one Deny shuts everything down.
+
+Also learned basic Git from the terminal today — clone, add, commit, push.
+
+Tried to restructure the labs folder and ran into two problems.
+First attempt failed — moved files with mv and two READMEs got lost in the process.
+Had to revert the whole commit and start over.
+
+Second problem was my own mistake — accidentally pasted my GitHub token into the chat
+while asking for help. Had to immediately delete it on GitHub and generate a new one.
+Classic security fail while learning security.
+
+Second attempt worked — used cp instead of mv so nothing got overwritten,
+then deleted the old folders separately. All files survived this time.
+
+Lesson: revert is not scary. Git keeps everything.
+And never paste tokens anywhere except the terminal.
+<img width="595" height="298" alt="Screenshot 2026-05-31 003240" src="https://github.com/user-attachments/assets/b8bffec0-d69f-469e-a7b4-b8043cd155a4" />
+<img width="509" height="140" alt="Screenshot 2026-05-31 003316" src="https://github.com/user-attachments/assets/27f29acd-3dc7-4a2b-9859-d183eb447af3" />
