@@ -98,83 +98,104 @@ you can see the server shutdown, restart, and my SSH connection:
 
 ---
 
-## Day 3 — S3, IAM hardening, VPC
+## Day 3 — S3, IAM, VPC
+
 **Date:** May 26, 2026
 
-Long session today. Covered a lot of ground.
+Long day. Started with auditing my own Windows machine before touching anything in AWS.
+Ran netstat, checked startup programs. Found Yandex Browser sitting in startup — removed it.
+Felt weird auditing my own computer but it made sense to start there.
 
-### Windows audit
-Started by auditing my own machine before touching anything else.
-Ran netstat, checked every process, looked at startup programs.
-Everything was clean. Found Yandex Browser in startup — going to remove it.
+Then moved to S3. Created a bucket and immediately wrote a policy to block HTTP —
+any unencrypted connection gets AccessDenied. Tested it myself by opening the file URL
+in a browser as an anonymous user.
 
-### S3 security
-Created my first S3 bucket and immediately tried to break into it.
-Wrote a bucket policy that forces HTTPS — any unencrypted connection gets denied.
-Then opened the file URL in a browser as an anonymous user.
-
-Got AccessDenied. Exactly what should happen.
 <img width="1787" height="611" alt="2026-05-25_22-48-11" src="https://github.com/user-attachments/assets/ef17d08d-f457-447c-b2df-b738a2a30773" />
-That's how Capital One should have had it configured in 2019.
 
-### IAM hardening
-Found two problems with tim-admin:
-— No MFA (fixed)
-— AdministratorAccess attached directly instead of via group (fixed)
+Got blocked. That's the Capital One breach in reverse — they had a misconfigured bucket, I didn't.
 
-Created Admins group, moved permissions there, added tim-admin to group.
-Now if I need to add another admin — just add them to the group.
-No need to touch individual policies.
+IAM was eye-opening. Noticed tim-admin had AdministratorAccess attached directly
+to the user, not through a group. That's bad practice — if you have 10 admins
+and need to change permissions, you'd have to touch 10 users individually.
+Moved everything to a group.
+
 <img width="2462" height="1062" alt="2026-05-25_23-09-10" src="https://github.com/user-attachments/assets/48a31f6c-9d78-4977-b8d6-814d1cd8e900" />
 
-Also noticed tim-admin has access to 449 AWS services.
-Only using maybe 5 of them. Classic overprivileged account.
-Will fix this properly when I learn to write custom IAM policies.
+Also noticed tim-admin has access to 449 AWS services. I use maybe 5.
+Classic overprivileged account — something to fix when I learn custom IAM policies.
 
-### VPC deep dive
-Finally understood how traffic actually gets from the internet to my server.
+VPC finally clicked today. I always knew there was "some network stuff" between
+the internet and my server but never understood what. Now I do:
 
-The full chain:
 Internet → Internet Gateway → Route table → Subnet → Security Group → EC2 → ufw → fail2ban → SSH
 
-The route table is what makes a subnet public or private.
-One line: 0.0.0.0/0 → igw-xxx
-Remove that line and the subnet has no internet access at all.
+The route table is the key. One line — 0.0.0.0/0 → igw-xxx — is what makes a subnet public.
+Remove it and the subnet goes dark. That simple.
+
 <img width="2377" height="1325" alt="2026-05-25_23-19-38" src="https://github.com/user-attachments/assets/8fdaef6f-a75c-447b-9b45-f34d98aea2c8" />
 
 Default VPC has all subnets public. Fine for learning, bad for production.
-Real architecture separates public and private subnets.
+
 ---
-## Day 4 — Python Automation & CloudTrail Analysis
 
-**Date:** May 28, 2026 | **Time:** ~2 hours
+## Day 4 — Python Scripts & CloudTrail
 
-### What I built today
+**Date:** May 28, 2026
 
-Three security audit scripts using Python and boto3.
+Wrote two scripts today. First time actually building something from scratch
+rather than just running commands.
 
-**iam_key_audit.py** — checks all IAM users for access keys older than 90 days.
-Old keys are a real risk — if a key leaked a year ago, you wouldn't know.
-Script flags anything over 90 days as critical.
+iam_key_audit.py checks if any IAM access keys are older than 90 days.
+Sounds simple but this is a real thing — companies get breached because
+someone left an old key sitting around for years and never rotated it.
 
-**cloudtrail_audit.py** — analyzes all AWS activity for the last 24 hours.
-Looks for dangerous events: deleting buckets, stopping logging, modifying IAM policies.
-Found 50 real events in my account. No suspicious activity detected.
+cloudtrail_audit.py pulls the last 24 hours of AWS activity and flags
+dangerous events — someone deleting a bucket, stopping logging, messing with IAM.
+Ran it and found 50 events. Nothing suspicious. But now I have a script
+that would catch it if something did happen.
 
-### What clicked today
+One thing that finally made sense — boto3 scripts run from my laptop, not from EC2.
+My local machine connects directly to AWS API over the internet.
+I kept thinking I needed the server running to use boto3. I didn't.
+EC2 is just a VM. IAM, S3, CloudTrail — completely separate services.
 
-boto3 doesn't need a running EC2 server.
-Scripts run locally and talk directly to AWS API over the internet.
-EC2 is just a VM — IAM, S3, CloudTrail are separate services.
+---
 
-### Key insight
+## Day 5 — AWS CLI & Bash Scripts & IAM Policies
 
-CloudTrail is the most important log in AWS.
-If an attacker deletes it first — you lose all visibility.
-That's why StopLogging and DeleteTrail are the first things to monitor.
+**Date:** May 31, 2026
 
-### Hands-on
-- Wrote iam_key_audit.py — key rotation check
-- Wrote cloudtrail_audit.py — suspicious event detection
-- Analyzed 50 real CloudTrail events from my account
-- Documented everything on GitHub
+Three things today, all connected.
+
+Started with AWS CLI — basically the same as opening the AWS console
+but from the terminal. One command instead of five clicks.
+First thing I ran into: my config had output = аутпоыjson written in Cyrillic.
+Classic copy-paste mistake from switching keyboard layouts.
+Fixed it in ~/.aws/config and everything worked.
+
+aws sts get-caller-identity is now my first command whenever I open a new session.
+It's just whoami for AWS — confirms I'm connected and who I am.
+
+<img width="784" height="842" alt="Screenshot 2026-05-30 223939" src="https://github.com/user-attachments/assets/bff4b4eb-ad0d-438c-a113-1e7f3b17ae3d" />
+
+
+Then wrote a Bash script that runs a full security check in one shot —
+who's logged in, what buckets exist, IAM users, CloudTrail status, MFA status.
+Before this I was running each command separately. Now it's one file.
+
+The MFA check was the interesting part — a for loop goes through every IAM user
+and asks AWS if they have an MFA device registered. If the list comes back empty,
+no MFA. Simple but effective. Something like this would actually run in a real SOC.
+
+<img width="557" height="577" alt="Screenshot 2026-05-30 225007" src="https://github.com/user-attachments/assets/c46c3cbd-981c-4a95-8f50-ffab08a7d6f9" />
+
+
+Last thing — IAM Policies. Wrote my first custom policy from scratch in JSON.
+Created SecurityAnalystReadOnly — gives access to read CloudTrail logs and nothing else.
+Three actions: LookupEvents, GetTrailStatus, DescribeTrails. That's it.
+449 services blocked by default. Least privilege in action.
+
+<img width="1187" height="772" alt="Screenshot 2026-05-30 235301" src="https://github.com/user-attachments/assets/6f340619-8338-48df-9b3a-b3db16d42a84" />
+
+Deny always beats Allow — that's the rule I'll remember from today.
+Doesn't matter how many policies say yes, one Deny shuts everything down.
