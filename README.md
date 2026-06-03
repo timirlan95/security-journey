@@ -1,9 +1,46 @@
 # Security Journey 🔐
-My path from zero to Cloud Security Engineer
 
-Started from absolute zero — no IT background.
-Currently working in economics and risk analytics,
-making a career transition into cloud security.
+**Career transition into Cloud Security.** Background in economics and risk analytics, now building hands-on AWS security skills — automation, threat detection, and least-privilege design.
+
+📍 Targeting: Cloud Security / GRC roles
+🎯 In progress: CompTIA Security+, AWS Security Specialty
+
+---
+
+## 🛠️ Featured Projects
+
+### AWS Security Audit Toolkit
+A set of Python (boto3) scripts that automate common cloud security checks. Each one solves a real problem that causes breaches in the wild.
+
+| Script | What it does | Why it matters |
+|--------|--------------|----------------|
+| [`s3_audit.py`](scripts/s3_audit.py) | Audits S3 buckets for public access, encryption, versioning | Misconfigured S3 caused the Capital One breach |
+| [`iam_key_audit.py`](scripts/iam_key_audit.py) | Flags IAM access keys older than 90 days | Stale keys are a top cause of credential compromise |
+| [`cloudtrail_audit.py`](scripts/cloudtrail_audit.py) | Scans CloudTrail for dangerous events (DeleteBucket, StopLogging, etc.) | Detects attacker activity and log tampering |
+| [`guardduty_audit.py`](scripts/guardduty_audit.py) | Pulls GuardDuty findings by severity via API | Programmatic threat triage at scale |
+| [`security_check.sh`](labs/04-automation/security_check.sh) | One-command full account security check | Fast posture assessment for a SOC |
+
+### Hands-On Labs
+Documented practical work, organized by domain:
+- [Linux & Networking](labs/01-linux-and-networking) — file permissions, log analysis, password hashing
+- [AWS Core](labs/02-aws-core) — S3 bucket policies, HTTPS enforcement
+- [AWS Monitoring](labs/03-aws-monitoring) — CloudTrail audit logging
+- [Automation](labs/04-automation) — AWS CLI, Bash scripting
+
+---
+
+## 💡 Skills Demonstrated
+
+**Cloud:** AWS (EC2, S3, IAM, VPC, CloudWatch, CloudTrail, GuardDuty)
+**Automation:** Python (boto3), Bash, AWS CLI
+**Security:** Least privilege, IAM policy design, threat detection, incident response basics, defense in depth
+**Tools:** Linux, Git, fail2ban, ufw
+
+---
+
+## 📓 Learning Journal
+
+Daily log of the journey — including mistakes and how I fixed them. The messy reality of learning, kept honest.
 
 ---
 
