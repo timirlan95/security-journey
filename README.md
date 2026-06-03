@@ -254,3 +254,38 @@ Lesson: revert is not scary. Git keeps everything.
 And never paste tokens anywhere except the terminal.
 <img width="595" height="298" alt="Screenshot 2026-05-31 003240" src="https://github.com/user-attachments/assets/b8bffec0-d69f-469e-a7b4-b8043cd155a4" />
 <img width="509" height="140" alt="Screenshot 2026-05-31 003316" src="https://github.com/user-attachments/assets/27f29acd-3dc7-4a2b-9859-d183eb447af3" />
+
+---
+
+## Day 6 — GuardDuty
+
+**Date:** June 2, 2026
+
+Finally got GuardDuty working — had to sort out the AWS account first.
+
+Enabled it and immediately generated 404 sample findings to see what real threats look like.
+AWS has a built-in function for this — one click and you get the full catalog of everything
+GuardDuty can detect. Good way to learn the threat landscape without waiting for actual attackers.
+
+<img width="1178" height="928" alt="Screenshot 2026-06-02 214610" src="https://github.com/user-attachments/assets/01d5c27e-175c-4616-bba7-2caedee1ea72" />
+
+Two findings that stuck with me:
+
+EC2 communicating with a Tor entry node — HIGH severity.
+Your server talking to Tor is not normal. Means it's probably compromised and someone
+is using it to hide their tracks. First move in real life: isolate the instance, then investigate.
+
+<img width="729" height="875" alt="Screenshot 2026-06-02 214753" src="https://github.com/user-attachments/assets/9c27c8d4-7e66-41e0-ba4f-6bd40c34ac3b" />
+
+
+IAMUser invoking anomalous APIs — LOW severity but interesting.
+GuardDuty learns what's normal for each user and flags anything unusual.
+This one showed AccessDenied on two calls — attacker tried but got blocked.
+Resource affected was an Access Key, not a console login. Someone got hold of a key, not a password.
+
+Then wrote guardduty_audit.py — pulls findings via boto3 instead of clicking through the console.
+Filters by severity (Medium and above), shows type and description for each one.
+Same data as the console, but now I can automate it or plug it into a bigger workflow.
+
+<img width="878" height="647" alt="Screenshot 2026-06-02 220439" src="https://github.com/user-attachments/assets/7945fe8b-e48f-460c-99f4-40f0f75e0675" />
+
