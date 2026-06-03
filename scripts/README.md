@@ -54,3 +54,22 @@ python3 cloudtrail_audit.py
 
 ### Output example
 <img width="949" height="910" alt="Screenshot 2026-05-28 235006" src="https://github.com/user-attachments/assets/347e36b6-9132-40d9-9e9b-9d63e680c85d" />
+
+---
+
+## guardduty_audit.py
+
+Connects to AWS GuardDuty and pulls all findings with Medium severity and above.
+
+Checks:
+- Gets the active detector ID
+- Filters findings by severity (Medium and above)
+- Shows finding type and description
+- Labels each finding as HIGH or MEDIUM
+
+### How to run
+python3 guardduty_audit.py
+
+### Output example
+
+<img width="878" height="647" alt="Screenshot 2026-06-02 220439" src="https://github.com/user-attachments/assets/f5475eea-13c6-43cd-911f-11e0f1a7b8fc" />
