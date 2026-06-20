@@ -44,8 +44,8 @@ Daily log of the journey — including mistakes and how I fixed them. The messy 
 
 ---
 
-## Day 1 — Networking & Linux Basics
-**Date:** May 23, 2026 | **Time:** ~3 hours
+## **Date:** May 23, 2026 — Networking & Linux Basics
+**Time:** ~3 hours
 
 First time touching Linux seriously. More hands-on than I expected.
 
@@ -76,8 +76,9 @@ are dangerous even when "hashed".
 
 ---
 
-## Day 2 — SSH, AWS EC2 & Real Attacks
-**Date:** May 25, 2026 | **Time:** ~4 hours
+## **Date:** May 25, 2026 — SSH, AWS EC2 & Real Attacks
+**Time:** ~4 hours
+
 
 First time in a real cloud environment. Things broke. Learned a lot.
 
@@ -135,9 +136,8 @@ you can see the server shutdown, restart, and my SSH connection:
 
 ---
 
-## Day 3 — S3, IAM, VPC
+## **Date:** May 26, 2026 — S3, IAM, VPC
 
-**Date:** May 26, 2026
 
 Long day. Started with auditing my own Windows machine before touching anything in AWS.
 Ran netstat, checked startup programs. Found Yandex Browser sitting in startup — removed it.
@@ -175,9 +175,8 @@ Default VPC has all subnets public. Fine for learning, bad for production.
 
 ---
 
-## Day 4 — Python Scripts & CloudTrail
+## **Date:** May 28, 2026 — Python Scripts & CloudTrail
 
-**Date:** May 28, 2026
 
 Wrote two scripts today. First time actually building something from scratch
 rather than just running commands.
@@ -198,11 +197,8 @@ EC2 is just a VM. IAM, S3, CloudTrail — completely separate services.
 
 ---
 
-## Day 5 — AWS CLI & Bash Scripts & IAM Policies
+## **Date:** May 31, 2026 — AWS CLI & Bash Scripts & IAM Policies
 
-**Date:** May 31, 2026
-
-Three things today, all connected.
 
 Started with AWS CLI — basically the same as opening the AWS console
 but from the terminal. One command instead of five clicks.
@@ -257,9 +253,7 @@ And never paste tokens anywhere except the terminal.
 
 ---
 
-## Day 6 — GuardDuty
-
-**Date:** June 2, 2026
+## **Date:** June 2, 2026 — GuardDuty
 
 Finally got GuardDuty working — had to sort out the AWS account first.
 
@@ -288,4 +282,25 @@ Filters by severity (Medium and above), shows type and description for each one.
 Same data as the console, but now I can automate it or plug it into a bigger workflow.
 
 <img width="878" height="647" alt="Screenshot 2026-06-02 220439" src="https://github.com/user-attachments/assets/7945fe8b-e48f-460c-99f4-40f0f75e0675" />
+
+---
+
+---
+
+## June 20, 2026 — Finished TryHackMe Pre Security
+
+Completed the full Pre Security path on TryHackMe — my first structured path done.
+
+Covered the fundamentals from the ground up — how networks work (DNS, IP, ports,
+the OSI model), how the web works (HTTP requests and responses), Linux basics,
+Windows fundamentals, and a first look at offensive security thinking.
+
+A lot of it overlapped with what I'd already learned hands-on with AWS and my own
+server — networking, Linux, how attackers probe systems. Good to see the same
+concepts laid out in a structured way and fill the gaps.
+
+Next: Cyber Security 101, running alongside CompTIA Security+ prep.
+
+<img width="308" height="86" alt="Screenshot 2026-06-20 015921" src="https://github.com/user-attachments/assets/36d94dec-cb9c-4c06-9b94-d677745a0edc" />
+
 
