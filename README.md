@@ -76,7 +76,7 @@ are dangerous even when "hashed".
 
 ---
 
-## **Date:** May 25, 2026 — SSH, AWS EC2 & Real Attacks
+## May 25, 2026 — SSH, AWS EC2 & Real Attacks
 **Time:** ~4 hours
 
 
@@ -136,7 +136,7 @@ you can see the server shutdown, restart, and my SSH connection:
 
 ---
 
-## **Date:** May 26, 2026 — S3, IAM, VPC
+## May 26, 2026 — S3, IAM, VPC
 
 
 Long day. Started with auditing my own Windows machine before touching anything in AWS.
@@ -175,7 +175,7 @@ Default VPC has all subnets public. Fine for learning, bad for production.
 
 ---
 
-## **Date:** May 28, 2026 — Python Scripts & CloudTrail
+## May 28, 2026 — Python Scripts & CloudTrail
 
 
 Wrote two scripts today. First time actually building something from scratch
@@ -197,7 +197,7 @@ EC2 is just a VM. IAM, S3, CloudTrail — completely separate services.
 
 ---
 
-## **Date:** May 31, 2026 — AWS CLI & Bash Scripts & IAM Policies
+## May 31, 2026 — AWS CLI & Bash Scripts & IAM Policies
 
 
 Started with AWS CLI — basically the same as opening the AWS console
@@ -253,7 +253,7 @@ And never paste tokens anywhere except the terminal.
 
 ---
 
-## **Date:** June 2, 2026 — GuardDuty
+## June 2, 2026 — GuardDuty
 
 Finally got GuardDuty working — had to sort out the AWS account first.
 
@@ -282,8 +282,6 @@ Filters by severity (Medium and above), shows type and description for each one.
 Same data as the console, but now I can automate it or plug it into a bigger workflow.
 
 <img width="878" height="647" alt="Screenshot 2026-06-02 220439" src="https://github.com/user-attachments/assets/7945fe8b-e48f-460c-99f4-40f0f75e0675" />
-
----
 
 ---
 
